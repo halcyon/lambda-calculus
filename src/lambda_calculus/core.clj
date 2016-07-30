@@ -70,3 +70,13 @@
    (fn [f]
      (fn [x]
        ((m (n f)) x)))))
+
+(defn mult2 [m n]
+  (Lambda.
+   (fn [f]
+     (m (n f)))))
+
+(defn pow [m n]
+  (Lambda.
+   (fn [f]
+     ((n m) f))))
