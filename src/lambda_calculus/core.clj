@@ -18,11 +18,8 @@
 (defn visual [x]
   (list 'f x))
 
-
-
 (defn view [f]
   ((f visual) 'x))
-
 
 (defn lambda-num [n]
   (fn [f]
@@ -60,37 +57,16 @@
   (Lambda.
    (fn [f]
      (fn [x]
-       (f (((lambda-num n) f) x))))))
-
-;; (defn add [m n]
-;;   (Lambda.
-;;     (fn [f]
-;;       (fn [x]
-;;         (((lambda-num n) f) (((lambda-num m) f) x))))))
+       (f ((n f) x))))))
 
 (defn add [m n]
   (Lambda.
     (fn [f]
       (fn [x]
-        ((n f) ((m f) x))))))
-
-;; (defn pow [m n]
-;;   (Lambda.
-;;    ((lambda-num n) (lambda-num m))))
+        ((m f) ((n f) x))))))
 
 (defn mult [m n]
   (Lambda.
    (fn [f]
      (fn [x]
-       ((n (m f)) x)))))
-
-(defn pow [m n]
-  (Lambda.
-   (fn [f]
-     (fn [x]
-       ((n (comp (m f) (m f))) x)))))
-
-(defn lambda-num [n]
-  (fn [f]
-    (fn [x]
-      ((apply comp (repeat n f)) x))))
+       ((m (n f)) x)))))
