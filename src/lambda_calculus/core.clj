@@ -80,3 +80,51 @@
   (Lambda.
    (fn [f]
      ((n m) f))))
+
+(defn T
+  [x]
+  (fn [y] x))
+
+(defn F
+  [x]
+  (fn [y] y))
+
+(defn view-bool [bool]
+  ((bool "T") "F"))
+
+(deftype LambdaBool [f]
+  Object
+  (toString [_] (str (view-bool f)))
+  (equals [this other] (= (view-bool this) (view-bool other)))
+  clojure.lang.IFn
+  (invoke [this g]
+    (f g)))
+
+(defmethod print-method LambdaBool [v ^java.io.Writer w]
+  (.write w (str v)))
+
+(def T (->LambdaBool (fn [x]
+                       (fn [y] x))))
+
+(def F (->LambdaBool (fn [x]
+                       (fn [y] y))))
+
+(defn negation [x]
+  (->LambdaBool
+   ((x F) T)))
+
+(defn negation-lambda [x]
+  (->LambdaBool
+   ((x (fn [x]
+         (fn [y] y))) (fn [x]
+                        (fn [y] x)))))
+
+(defn conjunction [x]
+  (->LambdaBool
+   (fn [y]
+     (->LambdaBool ((x y) F)))))
+
+(defn disjunction [x]
+  (->LambdaBool
+   (fn [y]
+     (->LambdaBool ((x T) y)))))
