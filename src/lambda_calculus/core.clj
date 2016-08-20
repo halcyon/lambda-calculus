@@ -128,3 +128,74 @@
   (->LambdaBool
    (fn [y]
      (->LambdaBool ((x T) y)))))
+
+(defn factorial [n]
+  (if (zero? n)
+    1
+    (* n (factorial (dec n)))))
+
+(defn factorial-gen [f]
+  (fn [n]
+    (if (zero? n)
+      1
+      (* n (f (dec n))))))
+
+(defn factorial-weird [f]
+  (fn [n]
+    (if (zero? n)
+      1
+      (* n ((f f) (dec n))))))
+
+
+(defn factorial-weird-expanded [f]
+  (fn [n]
+    (if (zero? n)
+      1
+      (* n ((fn [n]
+              (if (zero? n)
+                1
+                (* n ((fn [n]
+                        (if (zero? n)
+                          1
+                          (* n ((fn [n]
+                                  (if (zero? n)
+                                    1
+                                    (* n ((fn [n]
+                                            (if (zero? n)
+                                              1
+                                              (* n ((f f) (dec n)))))
+                                          (dec n)))))
+                                (dec n)))))
+                      (dec n)))))
+            (dec n))))))
+
+
+
+(defn factorial-weird-expanded-one [f]
+  (fn [n]
+    (if (zero? n)
+      1
+      (* n ((fn [n]
+              (if (zero? n)
+                1
+                (* n ((f f) (dec n))))) (dec n))))))
+
+(def factorial-weird-weird
+  ((fn [f]
+     (fn [n]
+       (if (zero? n)
+         1
+         (* n ((f f) (dec n))))))
+   (fn [f]
+     (fn [n]
+       (if (zero? n)
+         1
+         (* n ((f f) (dec n))))))))
+
+(((fn factorial [f]
+    (f f))
+  (fn [f]
+    (fn [n]
+      (if (zero? n)
+        1
+        (* n ((f f) (dec n))))))) 3)
