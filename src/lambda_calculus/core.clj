@@ -140,6 +140,13 @@
       1
       (* n (f (dec n))))))
 
+(def factorial-gen
+  (fn [f]
+    (fn [n]
+      (if (zero? n)
+        1
+        (* n (f (dec n)))))))
+
 (defn factorial-weird [f]
   (fn [n]
     (if (zero? n)
@@ -199,3 +206,18 @@
       (if (zero? n)
         1
         (* n ((f f) (dec n))))))) 3)
+
+
+(def Y (fn [f]
+         ((fn [x]
+            (x x))
+          (fn [x]
+            (f (fn [y]
+                 ((x x) y)))))))
+
+(def factorial-gen-for-y-combinator
+  (fn [f]
+    (fn [n]
+      (if (zero? n)
+        1
+        (* n (f (dec n)))))))
